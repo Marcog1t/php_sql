@@ -1,18 +1,19 @@
 <?php
 //inclusione dei file init
-include_once("init.php");
+include_once("connessione.php");
 
 //raccolta dei dati provenienti dal login
 $nome = $_POST['username'];
 $pass = $_POST['password'];
 
-// mi connetto al MySql Server
-$link = mysql_connect('localhost', 'marcowebwork', '');
-if (!$link) {
-    die('Could not connect: ' . mysql_error());}
+if(get_magic_quotes_gpc())
+	{
+		$nome      = stripslashes($nome);
+		$pass     = stripslashes($pass);
+	}
+	$nome      = mysql_real_escape_string($nome);
+	$pass     = mysql_real_escape_string($pass);
 
-// seleziono il database 
-mysql_select_db('my_marcowebwork', $link);
 
 //query che seleziona i campi nome e cognome
  $query = "SELECT * FROM utenti WHERE nome = '$nome' AND cognome = '$pass' ";
@@ -30,7 +31,7 @@ else $trovato = 1;
 if($trovato == 1) {
     echo 'dati validi, puoi proseguire';
     header("Refresh: 4; url=lista_utenti.php");
-
+session_start();
     $_SESSION["user"] = $cod;
 }
 else {

@@ -1,17 +1,20 @@
 <?php
 include_once("init.php");
+include_once("connessione.php");
 $nome = $_POST['username'];
 $pass = $_POST['password'];
 $email = $_POST['email'];
 
-// mi connetto al MySql Server
-$link = mysql_connect('localhost', 'marcowebwork', '');
-if (!$link) {
-    die('Could not connect: ' . mysql_error());
-}
+if(get_magic_quotes_gpc())
+	{
+		$nome      = stripslashes($nome);
+		$pass     = stripslashes($pass);
+		$email = stripslashes($email);
+	}
 
-// seleziono il database 
-mysql_select_db('my_marcowebwork', $link);
+	$nome      = mysql_real_escape_string($nome);
+	$pass     = mysql_real_escape_string($pass);
+	$email = mysql_real_escape_string($email);   
 
 // imposto ed eseguo la query
 $query = "INSERT INTO utenti (nome, cognome, email) VALUES ( '$nome', '$pass', '$email')";

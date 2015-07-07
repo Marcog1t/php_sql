@@ -1,5 +1,6 @@
 <?php
 include_once("init.php");
+include_once("connessione.php");
 
 session_unset();
 

@@ -1,16 +1,9 @@
 <?php
 $id = $_GET['id'];
 
-// mi connetto al MySql Server
-$link = mysql_connect('localhost', 'marcowebwork', '');
-if (!$link) {
-    die('Could not connect: ' . mysql_error());}
-
-// seleziono il database 
-mysql_select_db('my_marcowebwork', $link);
-
 //carico init
-include_once("init.php"); 
+include_once("init.php");
+include_once("connessione.php");
 
 //codice per la sessione
   if ($_SESSION["user"] == ""){
@@ -46,6 +39,20 @@ $unome = $_POST['nome'];
 $ucognome = $_POST['cognome'];
 $uid = $_POST['id'];
 $umail = $_POST['email'];
+     
+ if(get_magic_quotes_gpc())
+	{
+		$unome      = stripslashes($unome);
+		$umail     = stripslashes($umail);
+		$uid = stripslashes($uid);
+        $ucognome = stripslashes($ucognome);
+	}
+
+	$unome      = mysql_real_escape_string($unome);
+	$umail     = mysql_real_escape_string($umail);
+	$uid = mysql_real_escape_string($uid);   
+    $ucognome = mysql_real_escape_string($ucognome);
+    
     
 $update = "UPDATE utenti SET nome='$unome', email='$umail', cognome='$ucognome' WHERE id='$id'";
 $risult = mysql_query($update, $link);
